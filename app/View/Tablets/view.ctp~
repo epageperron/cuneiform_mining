@@ -1,0 +1,96 @@
+<!-- File: /app/views/tablets/view.ctp -->
+<div class="tablets view">
+<h2><?php  __('View a Tablet');?></h2>
+<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $tablet['Tablet']['id'])); ?>
+<fieldset><legend>Identification</legend>
+<?php echo $tablet['Tablet']['no_perso']; ?> - <a href="http://cdli.ucla.edu/<?php echo $tablet['Tablet']['no_cdli']; ?>" title="Link to CDLI entry" target="_cdli"><?php echo $tablet['Tablet']['no_cdli']; ?></a><br />
+<?php echo $tablet['Tablet']['no_museum']; ?> <?php echo $tablet['Collection']['collection']; ?><br /><br />
+
+<?php echo $tablet['Period']['period']; ?><?php if ($tablet['Tablet']['period_uncertain'] == 1)echo "?"; ?> 
+<?php echo $tablet['Genre']['genre']; ?><?php if ($tablet['Tablet']['genre_uncertain'] == 1)echo "?"; ?> 
+<?php echo $tablet['ObjectType']['object_type']; ?> from 
+<?php echo $tablet['ArchSite']['arch_site']; ?><?php if ($tablet['Tablet']['arch_site_uncertain'] == 1)echo "?"; ?><br />
+<br /><br />
+<?php echo $tablet['Tablet']['publications']; ?>
+
+</fieldset>
+<fieldset>
+<legend>Epigraphic Information</legend>
+
+Size: <?php echo $tablet['Tablet']['size']; ?> (<?php echo $tablet['SizeClass']['size_class']; ?>)  <br />
+Shape: <?php echo $tablet['Shape']['shape']; ?><br />
+Edges: <?php echo $tablet['Edge']['edge']; ?><br />
+Corners : <?php echo $tablet['Corner']['corner']; ?><br />
+Sign Paleography elements : <?php 
+			$j=0;
+			foreach ($tablet['SignPaleo'] as $v) {
+				if ($j!=0) {echo ' | ';}
+		echo $this->Html->link($v['sign_paleo'], array('controller' => 'sign_paleos', 'action' => 'view',$v['id'])); 
+		$j++;} ?> <br />
+Epigraphic notes: <?php echo $tablet['Tablet']['epi_notes']; ?>
+</fieldset>
+<fieldset>
+<legend>Home classification</legend>
+Project(s): <?php echo $tablet['Project']['project']; ?><br />
+Group(s) : 
+			<?php 
+			$j=0;
+			foreach ($tablet['Group'] as $v) {
+				if ($j!=0) {echo ' | ';}
+		echo $this->Html->link($v['group'], array('controller' => 'groups', 'action' => 'view', $v['id'])); 
+		$j++;} ?>
+<br />
+Keywords : 
+			<?php 
+			$j=0;
+			foreach ($tablet['Keyword'] as $v) {
+				if ($j!=0) {echo ' | ';}
+		echo $this->Html->link($v['keyword'], array('controller' => 'keywords', 'action' => 'view', $v['id'])); 
+		$j++;} ?>
+
+<br />
+Tags : 
+			<?php 
+			$j=0;
+			foreach ($tablet['Tag'] as $v) {
+				if ($j!=0) {echo ' | ';}
+		echo $this->Html->link($v['tag'], array('controller' => 'tags', 'action' => 'view', $v['id'])); 
+		$j++;} ?>
+		</fieldset>
+		<fieldset><legend>Contents - General</legend>
+		<?php echo $tablet['Tablet']['subject']; ?><br />
+		<?php echo $tablet['Tablet']['abstract']; ?><br />
+	</fieldset>
+
+<fieldset><legend>Contents - Specifics</legend>
+<!--Typo : 
+<?php //echo $this->Html->link($tablet['Ruler']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Ruler']['id'])); ?> 
+<?php //echo $this->Html->link($tablet['Year']['year'], array('controller' => 'years', 'action' => 'view', $tablet['Year']['id'])); ?> 
+<?php //echo $this->Html->link($tablet['Month']['month'], array('controller' => 'months', 'action' => 'view', $tablet['Month']['id'])); ?> 
+<?php //echo $tablet['DateMonth']['date_month']; ?>  - 
+<?php //echo $this->Html->link($tablet['MainAction']['main_action'], array('controller' => 'mainAction', 'action' => 'view', $tablet['MainAction']['id'])); ?>
+(<?php //echo $this->Html->link($tablet['MainVerb']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['MainVerb']['id'])); ?> ) 
+-->
+<?php 
+if ($tablet['Word']):
+foreach ($tablet['Word'] as $word): 
+echo $this->Html->link($word['word'], array('controller' => 'words', 'action' => 'view', $word['id']));
+echo ' ';
+endforeach; endif; 
+
+if ($tablet['Term']):
+foreach ($tablet['Term'] as $term): 
+echo $this->Html->link($term['term'], array('controller' => 'terms', 'action' => 'view', $term['id']));
+echo ' ';
+endforeach; endif;
+				
+?>
+<pre><?php echo $tablet['Tablet']['comments']; ?><<br />
+<div style="width:400px; float:left"><?php echo $tablet['Tablet']['translation']; ?></div>
+<div style="width:400px; float:left"><?php echo $tablet['Tablet']['translit']; ?></div>
+<?php 
+foreach (glob('/alty/htdocs/adab/app/webroot/tablet_files/'.$tablet['Tablet']['no_cdli'].'*') as $img): ?>
+<a href="/tablet_files/<?php echo basename($img); ?>"><img src="/tablet_files/<?php echo basename($img); ?>" style="width:400px;height:auto;"></a>
+<?php endforeach;?>
+<br />
+</fieldset>

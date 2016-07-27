@@ -1,0 +1,453 @@
+<div class="tablets index">
+	<h2><?php __('Tablets');?></h2>
+
+
+	<table cellpadding="0" cellspacing="0">
+	<tr>
+			<th><?php echo $this->Paginator->sort('no_perso');?></th>
+			<th><?php echo $this->Paginator->sort('no_cdli');?></th>
+			<th><?php echo $this->Paginator->sort('period_id');?></th>
+			<th><?php echo $this->Paginator->sort('ruler_id');?></th>
+			<th><?php echo $this->Paginator->sort('year_id');?></th>
+			<th><?php echo $this->Paginator->sort('month_id');?></th>
+			<th ><?php echo $this->Paginator->sort('official_id'); ?></th>
+			<th>Vocabulary</th>
+			<th><?php echo $this->Paginator->sort('subject');?></th>
+			<th class="actions"><?php __('Actions');?></th>
+	</tr>
+	<?php
+	$i = 0;
+	foreach ($tablets as $tablet):
+		$class = null;
+		if ($i++ % 2 == 0) {
+			$class = ' class="altrow"';
+		}
+	?>
+	<tr<?php echo $class;?>>
+<td><?php echo $this->Html->link(__($tablet['Tablet']['no_perso'], true), array('action' => 'view', $tablet['Tablet']['id'])); ?></td>
+		
+<td> <a href="http://cdli.ucla.edu/<?php echo $tablet['Tablet']['no_cdli'];?>" title="Link to CDLI entry" target="_cdli"><?php echo $tablet['Tablet']['no_cdli']; ?></a></td>
+
+<td>
+			<?php echo $this->Html->link($tablet['Period']['period'], array('controller' => 'terms', 'action' => 'view', $tablet['Tablet']['period_id'])); ?>
+		</td>	
+<td>
+			<?php echo $this->Html->link($tablet['Ruler']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Tablet']['ruler_id'])); ?>
+		</td>	
+	<td>
+			<?php echo $tablet['Year']['year']; ?>
+		</td>
+		<td>
+			<?php echo $this->Html->link($tablet['Month']['month'], array('controller' => 'months', 'action' => 'view', $tablet['Month']['id'])); ?>
+		</td>
+
+		
+		
+		<td >
+			<?php echo $this->Html->link($tablet['Official']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Official']['id'])); ?>
+			 
+		</td>
+		<td>
+<?php/*
+$fishermen = Array(); //12
+$rulers = Array(); //13
+$administrators	 = Array(); //14
+$anthroponyms = Array(); //9
+$toponyms = Array(); //8
+$theonyms = Array(); //10
+$verbs = Array(); //2
+$fishes = Array(); //3
+$verbalAdjectives = Array(); //4
+$titles = Array(); //11
+$nouns = Array(); //1
+$mesures = Array(); //5
+$properNouns = Array(); //17
+$operators = Array(); //6
+$numeralAdjectives = Array();//18
+$others = Array(); //7
+
+$qual_adj = Array();//19
+$month_names= Array();//20
+$fisherman_type= Array(); //21
+$tax= Array(); //22
+
+
+foreach ($tablet['Term'] as $v) {
+			switch ($v['word_type_id']) {				
+				
+				case 12:
+					$fishermen[$v['id']]=$v['term'];
+					break;
+				case 13:
+					$rulers[$v['id']]=$v['term'];
+					break;
+				case 14: 
+					$administrators[$v['id']]=$v['term'];
+					break;
+				case 9:
+					$anthroponyms[$v['id']]=$v['term'];
+					break;
+				case 8:
+					$toponyms[$v['id']]=$v['term'];
+					break;
+				case 10:
+					$theonyms[$v['id']]=$v['term'];
+					break;
+				case 2:
+					$verbs[$v['id']]=$v['term'];
+					break;
+				case 3:
+					$fishes[$v['id']]=$v['term'];
+					break;
+				case 4:
+					$verbalAdjectives[$v['id']]=$v['term'];
+					break;
+				case 11:
+					$titles[$v['id']]=$v['term'];
+					break;
+				case 1:
+					$nouns[$v['id']]=$v['term'];
+					break;
+				case 5:
+					$mesures[$v['id']]=$v['term'];
+					break;
+				case 17:
+					$properNouns[$v['id']]=$v['term'];
+					break;
+				case 6:
+					$operators[$v['id']]=$v['term'];
+					break;
+				case 18:
+					$numeralAdjectives[$v['id']]=$v['term'];
+					break;
+				case 19:
+					$qual_adj[$v['id']]=$v['term'];
+					break;
+				case 20:
+					$month_names[$v['id']]=$v['term'];
+					break;
+				case 21:
+					$fisherman_type[$v['id']]=$v['term'];
+					break;
+				case 22:
+					$tax[$v['id']]=$v['term'];
+					break;
+				
+				
+				
+				default:
+					$others[$v['id']]=$v['term'];
+					}
+			}
+
+*/
+			
+?>
+Fishermen :
+<?php 
+if (!empty($fishermen)){
+	$j=0;
+		foreach ($fishermen as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+
+<br />
+Rulers :
+<?php 
+if (!empty($rulers)){
+	$j=0;
+		foreach ($rulers as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+
+<br />
+Administrators :
+<?php 
+if (!empty($administrators)){
+	$j=0;
+		foreach ($administrators as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+
+<br />
+Anthroponyms :
+<?php 
+if (!empty($anthroponyms)){
+	$j=0;
+		foreach ($anthroponyms as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Toponyms :
+<?php 
+if (!empty($toponyms)){
+	$j=0;
+		foreach ($toponyms as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Theonyms :
+<?php 
+if (!empty($theonyms)){
+	$j=0;
+		foreach ($theonyms as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Verbs : 
+<?php 
+if (!empty($verbs)){
+	$j=0;
+		foreach ($verbs as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>	
+<br />
+Fishes :
+<?php 
+if (!empty($fishes)){
+	$j=0;
+		foreach ($fishes as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Verbal Adjectives :
+<?php 
+if (!empty($verbalAdjectives)){
+	$j=0;
+		foreach ($verbalAdjectives as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Profession / titles :
+<?php 
+if (!empty($titles)){
+	$j=0;
+		foreach ($titles as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Nouns :
+ <?php 
+if (!empty($nouns)){
+	$j=0;
+		foreach ($nouns as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Mesures :
+ <?php 
+if (!empty($mesures)){
+	$j=0;
+		foreach ($mesures as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Proper Nouns :
+ <?php 
+if (!empty($properNouns)){
+	$j=0;
+		foreach ($properNouns as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Operators :
+ <?php 
+if (!empty($operators)){
+	$j=0;
+		foreach ($operators as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Numeral Adjectives :
+ <?php 
+if (!empty($numeralAdjectives)){
+	$j=0;
+		foreach ($numeralAdjectives as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Adjectives, qualifitatives :
+ <?php 
+if (!empty($qual_adj)){
+	$j=0;
+		foreach ($qual_adj as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Months or festival names :
+ <?php 
+if (!empty($month_names)){
+	$j=0;
+		foreach ($month_names as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Fisherman types:
+ <?php 
+if (!empty($fisherman_type)){
+	$j=0;
+		foreach ($fisherman_type as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+<br />
+Taxes or fish dues :
+ <?php 
+if (!empty($tax)){
+	$j=0;
+		foreach ($tax as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}
+?>
+
+
+<br />
+Others :
+ <?php 
+if (!empty($others)){
+	$j=0;
+		foreach ($others as $key => $value) {
+			if ($j!=0) { 																			// On fait afficher une barre entre les termes
+				echo ' | ';
+				} 
+			echo $this->Html->link($value, array('controller' => 'terms', 'action' => 'view', $key)); 
+			$j++;
+			}
+}	?>
+
+			</td>
+				<td><?php echo $tablet['Tablet']['subject']; ?></td>
+		<td class="actions">
+			
+			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $tablet['Tablet']['id'])); ?>
+			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $tablet['Tablet']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tablet['Tablet']['id'])); ?>
+		</td>
+	</tr>
+<?php endforeach; ?>
+	</table>
+	<p>
+	<?php
+	echo $this->Paginator->counter(array(
+	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
+	));
+	?>	</p>
+
+	<div class="paging">
+		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
+	 | 	<?php echo $this->Paginator->numbers();?>
+ |
+		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+	</div>
+</div>

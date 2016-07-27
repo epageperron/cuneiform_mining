@@ -1,0 +1,17 @@
+<?php
+class SizeClass extends AppModel {
+	var $name = 'SizeClass';
+	var $displayField = 'size_class';
+	var $validate = array(
+		'corner' => array(
+		'rule' => 'notEmpty'
+		)
+	);
+	var $hasMany = array(
+		'Tablet' => array(
+			'className' => 'Tablet',
+			'foreignKey' => 'size_class_id'
+		)
+	);
+
+}

@@ -1,0 +1,17 @@
+<?php
+class Corner extends AppModel {
+	var $name = 'Corner';
+	var $displayField = 'corner';
+	var $validate = array(
+		'corner' => array(
+		'rule' => 'notEmpty'
+		)
+	);
+	var $hasMany = array(
+		'Tablet' => array(
+			'className' => 'Tablet',
+			'foreignKey' => 'corner_id'
+		)
+	);
+
+}

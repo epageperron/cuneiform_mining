@@ -1,0 +1,22 @@
+<?php
+class TabletsTerms extends AppModel {
+	var $name = 'TabletsTerms';
+	var $actsAs = array('Searchable','ExtendAssociations', 'Containable');
+	
+	var $belongsTo = array(
+		'Tablet' => array(
+			'className' => 'Tablet',
+			'foreignKey' => 'tablet_id'
+
+		),
+		'Term' =>
+            array(	'className' => 'Term',
+					'foreignKey' => 'term_id'
+        )
+     
+	
+	);
+	
+	
+		
+}
