@@ -1,5 +1,6 @@
 <div class="words index">
-<h2><?php echo __('Words'); ?></h2>
+<h2><?php echo __('Words');
+$z=0;?></h2>
 <div class="paging">
 <?php
 echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
@@ -9,6 +10,7 @@ echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => '
 </div>
 <table cellpadding="0" cellspacing="0">
 <tr>
+<th>No</th>
 <th><?php echo $this->Paginator->sort('word'); ?></th>
 <th><?php echo $this->Paginator->sort('word_types'); ?></th>
 <th><?php echo $this->Paginator->sort('terms'); ?></th>
@@ -20,7 +22,8 @@ echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => '
 </tr>
 <?php foreach ($words as $word): ?>
 <tr>
-<td>
+<td><?php $z++; echo $z; ?></td>
+  <td>
 <?php echo $this->Html->link(h($word['Word']['word']), array('controller' => 'words','action' => 'view', $word['Word']['id'])); ?></td>
 <td>
 <?php

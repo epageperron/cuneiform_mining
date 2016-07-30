@@ -9,6 +9,7 @@
 	<?php if (!empty($wordType['Word'])):?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
+		<th>No</th>
 		<th>Word</th>
 		<th>Comments</th>
 			<th>Terms</th>
@@ -23,6 +24,7 @@
 			}
 		?>
 		<tr<?php echo $class;?>>
+	<td><?php $z++; echo $z; ?></td>
 			<td><?php echo $this->Html->link($word['word'], array('controller' => 'words', 'action' => 'view', $word['id'])); ?></td>
 			<td><?php echo $word['comments'];?></td>
 			<td><?php

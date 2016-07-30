@@ -2,6 +2,7 @@
 	<h2><?php __('Word Types');?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
+		<th>No</th>
 			<th><?php echo $this->Paginator->sort('word_type');?></th>
 			<th><?php echo $this->Paginator->sort('parent_id');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -15,6 +16,7 @@
 		}
 	?>
 	<tr<?php echo $class;?>>
+	<td><?php $z++; echo $z; ?></td>
 		<td><?php echo $this->Html->link($wordType['WordType']['word_type'], array('controller' => 'word_types', 'action' => 'view', $wordType['WordType']['id'])); ?>
 </td>
 		<td>

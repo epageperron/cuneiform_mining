@@ -12,7 +12,7 @@ $terms = $this->Term->find('all', array (
 'contain' => array('Word'),
 ));
 
-$this->set('terms', $this->paginate());
+$this->set('terms', $terms);
 
 }
 

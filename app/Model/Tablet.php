@@ -121,7 +121,7 @@ function _getTermIds() {
 	$terms = preg_replace('/^[0-9]*(\')?\./m', '', $terms); // remove line numbering, including with '
 	$terms = preg_replace('/^[>@$&#].*(\s*)?/m','', $terms); // remove all atf markings
 	$terms= str_replace(array('\r\n', '\r', '\n','\n\r','\t'), ' ', $terms); // remove returns and new lines
-	$terms= str_replace(array('~','"','[', ']', '#'), '', $terms); // remove broken markings
+	$terms= str_replace(array('~','"','[', ']', '#','_'), '', $terms); // remove broken markings
 	$terms= str_replace(array('[x]'), 'x', $terms); // remove broken markings
 	$terms = trim($terms, chr(173));
 	$terms = mb_ereg_replace('\s+', ' ', $terms);
