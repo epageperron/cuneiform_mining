@@ -27,11 +27,14 @@ white-space: -pre-wrap; /* Opera 4-6 */
 white-space: -o-pre-wrap; /* Opera 7 */
 word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+ td pre.list-translit{
+font-size:50%;
 
+ }
 caption{
 background-color: #003D4C;
 color:white;
-  
+
 }
 /** General Style Info **/
 body {
@@ -304,7 +307,7 @@ input, textarea {
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
 	padding: 1%;
 	width:98%;
-	
+
 }
 textarea.large_text{
 	background: #eee url('../img/stripped.png');
@@ -564,7 +567,7 @@ div.auto_complete    {
      border           :1px solid #888;
      margin           :0px;
      padding          :0px;
-} 
+}
 li.selected    { background-color: #ffb; }
 
 .auto_complete {
@@ -631,4 +634,49 @@ table
 table td, table th
 {
     padding: 0; /* 'cellpadding' equivalent */
+}
+.ttip {
+    position: relative;
+    display: inline-block;
+    }
+
+.ttip .tttext {
+    visibility: hidden;
+    width: auto;
+		min-width: 100px;
+    background-color: #eee;
+    color: #333;
+		margin:2px;
+    border-radius: 6px;
+    padding: 2px;
+		border: 1px #333;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+}
+.tttext {
+padding:5px;
+}
+.ttip:hover .tttext {
+    visibility: visible;
+}
+#translit, #cdli_atf{
+font-family: monospace;
+min-width: 700;
+float:left;
+padding: 5px;
+
+}
+
+ins {
+    color: green;
+    /*background: #dfd; */
+    text-decoration: none;
+}
+del {
+    color: red;
+/*    background: #fdd;
+    text-decoration: none; */
 }

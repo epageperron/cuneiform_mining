@@ -17,14 +17,26 @@ class WordTypesController extends AppController {
 			$this->Session->setFlash(__('Invalid word type', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->WordType->recursive = 2;
 		$this->set('wordType', $this->WordType->find('first',array(
 		'conditions' => array('WordType.id' => $id),
-		'contain' => array('Word' =>'Term',
-	))));
+		'contain' => array('Word' => array('Term'))
+	)));
 
 		$this->set('wordType', $this->WordType->read(null, $id));
 	}
+
+	function latex_glossary() {
+		$this->WordType->recursive = 4;
+		$this->set('wordTypes', $this->WordType->find('all',array(
+		'contain' => array(
+								'Word' => array(
+									'Term' => array(
+										'Tablet'=> array('Period'))
+	)))));
+
+		$this->set('wordTypes', $this->WordType->read(null, $id));
+	}
+
 
 	function add() {
 		if (!empty($this->data)) {

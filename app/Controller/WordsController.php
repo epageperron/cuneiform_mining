@@ -1,9 +1,22 @@
 <?php
 class WordsController extends AppController {
 var $actsAs = array ('Searchable', 'Containable');
-var $components = array('RequestHandler'/*, 'Search'*/, 'Session');
 var $name = 'Words';
+public $helpers = array('Html', 'Form', 'Ajax','Javascript', 'Text','Resize');
+public $components = array('Paginator', 'RequestHandler'/*, 'Search'*/, 'Filter.Filter', 'Session');
 var $uses = array(/*'Term',*/ 'Word', 'WordType', 'Tablet');
+
+
+
+    var $filters = array
+        (
+            'index' => array
+            (
+                'Word' => array
+                  (
+                  'Word.word')));
+
+
 
 public function index() {
 $words = $this->Word->find('all', array(

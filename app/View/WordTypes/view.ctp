@@ -11,6 +11,7 @@
 	<tr>
 		<th>No</th>
 		<th>Word</th>
+		<th>Translation</th>
 		<th>Comments</th>
 			<th>Terms</th>
 		<th class="actions">Actions</th>
@@ -26,6 +27,7 @@
 		<tr<?php echo $class;?>>
 	<td><?php $z++; echo $z; ?></td>
 			<td><?php echo $this->Html->link($word['word'], array('controller' => 'words', 'action' => 'view', $word['id'])); ?></td>
+	<td><?php echo $word['translation'];?></td>
 			<td><?php echo $word['comments'];?></td>
 			<td><?php
 		$j=0;

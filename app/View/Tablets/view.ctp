@@ -2,7 +2,6 @@
 <div class="tablets view">
 <h2><?php  __('View a Tablet');?></h2>
 <?php
-
 echo $this->Html->link(__('Edit', true), array('action' => 'edit', $tablet['Tablet']['id'])); ?>
 <fieldset><legend>Identification</legend>
 <?php echo $tablet['Tablet']['no_perso']; ?> - <a href="http://cdli.ucla.edu/<?php echo $tablet['Tablet']['no_cdli']; ?>" title="Link to CDLI entry" target="_cdli"><?php echo $tablet['Tablet']['no_cdli']; ?></a><br />
@@ -19,10 +18,11 @@ echo $this->Html->link(__('Edit', true), array('action' => 'edit', $tablet['Tabl
 <fieldset>
 <legend>Epigraphic Information</legend>
 
-Size: <?php echo $tablet['Tablet']['size']; ?> (<?php echo $tablet['SizeClass']['size_class']; ?>)  <br />
-Shape: <?php echo $tablet['Shape']['shape']; ?><br />
-Edges: <?php echo $tablet['Edge']['edge']; ?><br />
+Size: <?php echo $tablet['Tablet']['size']; ?> (<?php echo $tablet['SizeClass']['size_class']; ?>) W/H ratio: <?php $tablet['Tablet']['wh_ratio']; ?>  Thickness ratio:<?php $tablet['Tablet']['t_ratio']; ?><br/>
+Shape: <?php echo $tablet['Shape']['shape']; ?>,
+Edges: <?php echo $tablet['Edge']['edge']; ?>,
 Corners : <?php echo $tablet['Corner']['corner']; ?><br />
+
 Sign Paleography elements : <?php
 			$j=0;
 			foreach ($tablet['SignPaleo'] as $v) {
@@ -58,21 +58,42 @@ Tags :
 				if ($j!=0) {echo ' | ';}
 		echo $this->Html->link($v['tag'], array('controller' => 'tags', 'action' => 'view', $v['id']));
 		$j++;} ?>
-		</fieldset>
+
+
+						</fieldset>
 		<fieldset><legend>Contents - General</legend>
 		<?php echo $tablet['Tablet']['subject']; ?><br />
 		<?php echo $tablet['Tablet']['abstract']; ?><br />
 	</fieldset>
 
-<fieldset><legend>Contents - Specifics</legend>
-<!--Typo :
-<?php //echo $this->Html->link($tablet['Ruler']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Ruler']['id'])); ?>
-<?php //echo $this->Html->link($tablet['Year']['year'], array('controller' => 'years', 'action' => 'view', $tablet['Year']['id'])); ?>
-<?php //echo $this->Html->link($tablet['Month']['month'], array('controller' => 'months', 'action' => 'view', $tablet['Month']['id'])); ?>
-<?php //echo $tablet['DateMonth']['date_month']; ?>  -
-<?php //echo $this->Html->link($tablet['MainAction']['main_action'], array('controller' => 'mainAction', 'action' => 'view', $tablet['MainAction']['id'])); ?>
-(<?php //echo $this->Html->link($tablet['MainVerb']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['MainVerb']['id'])); ?> )
--->
+	<fieldset><legend>Contents - Specifics</legend>
+Calendar:
+	<?php echo $this->Html->link($tablet['Ruler']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Ruler']['id'])); ?>
+	<?php echo $this->Html->link($tablet['Year']['year'], array('controller' => 'years', 'action' => 'view', $tablet['Year']['id'])); ?>
+	<?php echo $this->Html->link($tablet['Month']['month'], array('controller' => 'months', 'action' => 'view', $tablet['Month']['id'])); ?>
+	<?php echo $tablet['DateMonth']['date_month']; ?>
+	 <br /><br />
+
+<table>
+	<tr><th>Transaction</th><th>Verb</th><th>Topic</th><th>Goods</th></tr>
+	<?php
+						$j=0;
+						foreach ($tablet['Transac'] as $transac){
+echo '<tr><td>';
+	echo $this->Html->link($transac['MainAction']['main_action'], array('controller' => 'main_actions', 'action' => 'view', $transac['MainAction']['id']));
+	echo ' </td><td>';
+	echo $this->Html->link($transac['Verb']['term'], array('controller' => 'verbs', 'action' => 'view', $transac['Verb']['id']));
+	echo '</td><td>';
+	echo $this->Html->link($transac['MainTopic']['main_topic'], array('controller' => 'main_topics', 'action' => 'view', $transac['MainTopic']['id']));
+	echo '</td><td>';
+	echo $this->Html->link($transac['Good']['term'], array('controller' => 'goods', 'action' => 'view', $transac['Good']['id']));
+	echo '</td></tr>';
+
+	}
+		 ?>
+	 </table>
+
+
 <?php
 
 if ($vocab){
@@ -148,9 +169,71 @@ foreach ($vocab as $vocab_unit){
 }// end of if vocab
 ?>
 <br /><br />
-<pre><?php echo $tablet['Tablet']['comments']; ?></pre>
-<pre style="width:400px; float:left"><?php echo $tablet['Tablet']['translation']; ?></pre>
-<pre style="width:400px; float:left"><?php echo $tablet['Tablet']['translit']; ?></pre>
+<?php echo $tablet['Tablet']['comments']; ?>
+
+<div id="translation"><?php echo $tablet['Tablet']['translation']; ?></div>
+
+<div id="translit">
+<?php
+$lines = explode(PHP_EOL, $tablet['Tablet']['translit']);
+foreach ($lines as $line){
+	$line = trim($line,' ');
+	if (is_numeric(mb_substr($line, 0, 1, 'utf-8'))){
+		//add line numbering to $translit and remove from currently processed line
+		$rgx="/^\d+(\'*)\.\s/";
+		$split=preg_split($rgx, $line);
+		preg_match($rgx, $line, $match);
+		$translit.=$match[0]; $line=$split[1];
+		//split into tokens
+		$tokens = explode(" ", $line);
+		foreach ($tokens as $token){
+			$stripped_token = str_replace(array('~','"','[', ']', '#','_'), '', $token);
+			$stripped_token = trim(str_replace(array('[x]'), 'x', $stripped_token));
+			$voc=0;
+			foreach ($vocab as $vocab_unit){
+				if ($vocab_unit['Term']['term']==$stripped_token){
+					$ann='<div class="ttip">';
+					$ann.=$this->Html->link($token, array('controller' => 'terms', 'action' => 'view', $vocab_unit['Term']['id']));
+					$ann.='<span class="tttext">';
+					$ann.=$this->Html->link($vocab_unit['Word']['word'], array('controller' => 'words', 'action' => 'view', $vocab_unit['Word']['id']));
+					$ann.='<br />';
+					$ann.=$this->Html->link($vocab_unit['WordType']['word_type'], array('controller' => 'word_types', 'action' => 'view', $vocab_unit['WordType']['id']));
+					$ann.='<br />';
+					$ann.=$vocab_unit['Word']['translation'];
+					$ann.='<br />';
+					$ann.=$vocab_unit['Word']['comments'];
+					$ann.='<br />';
+					$ann.=$vocab_unit['Word']['bibliography'];
+					$ann.='</span></div>';
+					$translit.=$ann;
+					$translit.=" ";
+					$voc=1;
+					break;
+					}
+				}
+				if ($voc !=1) {
+					$translit.= $token." ";
+					}
+				}
+			}
+			else{
+			$translit.=$line;
+			}
+			$translit.="<br />";
+		}
+	echo $translit;
+?>
+</div>
+<div id="cdli_atf">
+<?php
+require_once(ROOT . DS . 'app' . DS .'Vendor' . DS  . 'FineDiff' . DS . 'finediff.php');
+$to_text	=	implode("\n", array_map('trim', explode("\n", $tablet['Tablet']['cdli_atf'])));
+$from_text	=	implode("\n", array_map('trim', explode("\n", $tablet['Tablet']['translit'])));
+$opcodes = FineDiff::getDiffOpcodes ( rtrim($from_text), rtrim($to_text), FineDiff::$wordGranularity );
+$opcodes =  FineDiff::renderDiffToHTMLFromOpcodes($from_text,$opcodes);
+echo str_replace('\n','<br />', nl2br($opcodes));
+?>
+</div>
 <?php
 foreach (glob('/alty/htdocs/adab/app/webroot/tablet_files/'.$tablet['Tablet']['no_cdli'].'*') as $img): ?>
 <a href="/tablet_files/<?php echo basename($img); ?>"><img src="/tablet_files/<?php echo basename($img); ?>" style="width:400px;height:auto;"></a>

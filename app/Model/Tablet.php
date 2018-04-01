@@ -93,11 +93,25 @@ var $hasAndBelongsToMany = array(
                 'foreignKey'             => 'tablet_id',
                 'associationForeignKey'  => 'keyword_id',
                 'unique'                 => true,
-				));
+				),
+    		'Transac' => array(
+    			'className' => 'Transac',
+    			'joinTable' => 'tablets_transacs',
+    			'foreignKey' => 'tablet_id',
+    			'associationForeignKey' => 'transac_id',
+    			'unique' => 'keepExisting',
+    			'conditions' => '',
+    			'fields' => '',
+    			'order' => '',
+    			'limit' => '',
+    			'offset' => '',
+    			'finderQuery' => '',
+    		)
+      );
 
 
 public function beforeSave() {
-parent::beforeSave();
+	parent::beforeSave();
 	$termIds = $this->_getTermIds();
 	if(!empty($termIds)) {
 		if(!isset($this->data['Term']['Term'])) {
@@ -116,10 +130,8 @@ function _getTermIds() {
 	mb_internal_encoding("UTF-8");
 	mb_regex_encoding("UTF-8");
 	$terms=$this->data['Tablet']['translit'];
-
-
 	$terms = preg_replace('/^[0-9]*(\')?\./m', '', $terms); // remove line numbering, including with '
-	$terms = preg_replace('/^[>@$&#].*(\s*)?/m','', $terms); // remove all atf markings
+	$terms = preg_replace('/^[>@$&#].*(\s*)?/m','', $terms); // remove atf structure markers
 	$terms= str_replace(array('\r\n', '\r', '\n','\n\r','\t'), ' ', $terms); // remove returns and new lines
 	$terms= str_replace(array('~','"','[', ']', '#','_'), '', $terms); // remove broken markings
 	$terms= str_replace(array('[x]'), 'x', $terms); // remove broken markings
@@ -135,7 +147,6 @@ function _getTermIds() {
 
 		if(Set::filter($terms)) {
 		foreach($terms as $term) {
-		//$this->Tablet->Term = $this->Term;
 			$existingTerm = $this->Term->find('first', array('conditions' => array('Term.term' => $term)));
 			if(!$existingTerm) {
 			$this->Term->create();

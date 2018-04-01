@@ -21,14 +21,13 @@ echo $this->Form->create('Tablet', array('action' => 'edit', 'type' => 'file'));
 <?php echo $this->element('tablet_arch_loc_div'); ?></div>
 <?php 	echo $this->Form->input('no_arch');		?>
 <?php	echo $this->Form->input('no_etcsl');	?>
-<?php	echo $this->Form->input('size');		?>
 </fieldset>
 <fieldset>
 <legend>Epigraphic Information</legend>
 <?php
 echo $this->Form->input('object_type_id', array('empty' => '     '));
-echo $this->Form->input('no_size');
 echo $this->Form->input('size_class_id', array('empty' => '     '));
+echo $this->Form->input('size');
 echo $this->Form->input('edge_id', array('empty' => '     '));
 echo $this->Form->input('corner_id', array('empty' => '     '));
 echo $this->Form->input('shape_id', array('empty' => '     '));
@@ -42,7 +41,6 @@ echo $this->Form->input('epi_notes');
 <div id="group" class="updatable">			<?php echo $this->element('tablet_group_div'); ?>	</div>
 <div id="keyword" class="updatable">		<?php echo $this->element('tablet_keyword_div'); ?>		</div>
 <div id="tag" class="updatable">			<?php echo $this->element('tablet_tag_div'); ?>		</div>
-<div id="action" class="updatable">			<?php echo $this->element('tablet_action_div'); ?>		</div>
 </fieldset>
 <fieldset>
 <legend>Contents - General</legend>
@@ -51,9 +49,10 @@ echo $this->Form->input('epi_notes');
 <?php echo $this->Form->input('period_uncertain'); ?>
 <?php echo $this->Form->input('Language', array('empty' => '     ')); ?>
 
-<div id="genre" class="updatable"> 			<?php echo $this->element('tablet_genre_div'); ?>	</div>
+<div id="genre" class="updatable"> <?php echo $this->element('tablet_genre_div'); ?>	</div>
 <?php echo $this->Form->input('genre_uncertain'); ?>
 
+<div id="transac" class="updatable">			<?php echo $this->element('tablet_transac_div'); ?>	</div>
 <?php echo $this->Form->input('subject');?>
 <?php echo $this->Form->input('abstract');?>
 
@@ -76,11 +75,6 @@ echo $this->Form->input('epi_notes');
 <div id="to_person" class="updatable"> 		<?php echo $this->element('tablet_to_person_div'); ?>		</div>
 <div id="from_location" class="updatable">	<?php echo $this->element('tablet_from_location_div'); ?>	</div>
 <div id="to_location" class="updatable">	<?php echo $this->element('tablet_to_location_div'); ?> 	</div>
-
-<div class="clr"></div>
-
-<div id="main_action" class="updatable">	<?php echo $this->element('tablet_main_action_div'); ?>		</div>
-<div id="main_verb" class="updatable">		<?php echo $this->element('tablet_main_verb_div'); ?>		</div>
 
 <div class="clr"></div>
 

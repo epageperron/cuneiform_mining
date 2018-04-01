@@ -1,10 +1,17 @@
-<?php
+ <?php
 class TabletsController extends AppController {
 public $name = 'Tablets';
 public $helpers = array('Html', 'Form', 'Ajax','Javascript', 'Text','Resize');
-public $paginate = array('maxLimit' => 500, 'limit' => 500, 'order' => 'period_id');
 public $components = array('Paginator', 'RequestHandler'/*, 'Search'*/, 'Filter.Filter', 'Session');
-public $uses = array('Tablet', 'Term', 'TabletTerm','WordType','Word');
+public $uses = array('Transac','Tablet', 'Term', 'TabletTerm','WordType','Word');
+public $paginate = array(
+		'maxLimit' => 500,
+		'limit' => 500,
+		'order' => array(
+					'Tablet.period_id' => asc
+		)
+);
+
 
 	function beforeFilter()
 	{
@@ -58,16 +65,12 @@ public $uses = array('Tablet', 'Term', 'TabletTerm','WordType','Word');
 										  'label' => 'Genre',
 										  'selector'=>'list_genres'
 									      ),
-								/*	'Tag.tag_id' => array
-									 (
-									 'type' => 'select',
-									 'label' => 'Tags'
-								 ),*/
-							 		'Period.period_id' => array
+							 		'Tablet.period_id' => array
 									 		(
 										 'type' => 'select',
-										 'label' => 'Period'
-											 ),
+										 'label' => 'Period',
+										 'selector'=>'list_periods'
+											 )
 
 
 
@@ -148,6 +151,8 @@ function refresh_all_terms()
 		$this->Tablet->save($this->data);// just resave tablet so the terms are extracted
 	}
 }
+
+
 function delete_extra_terms()
 {
 // delete terms that don't have any tablet
@@ -160,20 +165,45 @@ function delete_extra_terms()
 		}
 	}
 }
-function index(){
-//$this->set('title', 'Tablets Index');
-$this->set('tablets', $tablets = $this->Tablet->find('all', array(
-'contain' => 'Period',
-'Collection', 'Project', 'ArchSite', 'Genre')));
-//$this->set('tablets', $this->paginate());
-}
 
 function typo() {
-		$this->set('title', 'Tablets Typology');
+		$this->set('title', 'Tablets Transactions Typology');
 		$this->Tablet->recursive = 1;
-		$this->set('tablets', $this->Tablet->find('all',
-		array(
-    'order' => array('Tablet.ruler_id','Tablet.year_id', 'Tablet.main_verb_id  DESC'))));
+		$this->set('tablets', $this->Tablet->find('all', array(
+			'contain' => array(
+									'Period',
+									'Transac'))));
+}
+function index(){
+$this->set('tablets', $tablets = $this->Tablet->find('all', array(
+	'contain' => array(
+							'Period',
+							'ArchSite',
+							'Group',
+							'Keyword',
+							'Tag',
+							/*	'Term'=> array(
+											'Word'=> array(
+											'WordType'))*/))));
+/*$this->set('tablets', $this->paginate());*/
+}
+function latex_tablets(){
+$this->set('tablets', $tablets = $this->Tablet->find('all', array(
+	//'order' => array('Tablet.no_perso  DESC'),
+	'contain' => array(
+							/*'Period',
+							'ArchSite',
+							'Group',
+							'Transac',
+								'Term'=> array(
+											'Word'=> array(
+											'WordType'))*/))));
+/*$this->set('tablets', $this->paginate());*/
+}
+function medium() {
+		$this->set('title', 'Tablets Medium Typology');
+		$this->Tablet->recursive = 2;
+		$this->set('tablets', $this->Tablet->find('all'));
 }
 
 function view($id = null) {
@@ -181,6 +211,17 @@ function view($id = null) {
 			$this->Session->setFlash(__('Invalid tablet', true));
 			$this->redirect(array('action' => 'index'));
 		}
+
+		$tablet = $this->Tablet->find('first',array('conditions' => array('Tablet.id' => $id),'contain' => array()));
+
+		$atf_file=file_get_contents('/alty/data/cdli_data/cdliatf_unblocked.atf');
+		if(strpos($atf_file, $tablet['Tablet']['no_cdli'])){
+			preg_match('/(&'.$tablet['Tablet']['no_cdli'].'(.+?)&P)/s', $atf_file, $out);
+			$this->Tablet->id = $id;
+			$this->Tablet->set('cdli_atf','&'.$tablet['Tablet']['no_cdli'].$out[2]);
+			$this->Tablet->save();
+			}
+
 		$this->Tablet->recursive = 3;
 		$this->set('tablet', $this->Tablet->find('first',array(
     'conditions' => array('Tablet.id' => $id),
@@ -189,10 +230,13 @@ function view($id = null) {
 								'Collection',
 								'Project',
 								'ArchSite',
+								'ObjectType',
 								'Group',
 								'Keyword',
 								'Tag',
 								'SignPaleo',
+								'Transac'=> array(
+									 			'MainAction', 'Verb', 'MainTopic', 'Good'),
 								'Term'=> array(
 									 			'Word'=> array(
 															'WordType'))))));
@@ -200,7 +244,7 @@ function view($id = null) {
 $db = $this->WordType->getDataSource();
 $this->set('vocab',	$db->fetchAll(
 	'SELECT WordType.id, WordType.word_type, WordType.parent_id, Word.id, Word.word, Word.translation, Word.comments, Word.bibliography, Term.id, Term.term, Term.Comments FROM adab.word_types AS WordType
-INNER JOIN adab.words_word_types 	AS WordsWordType 		ON (WordsWordType.word_type_id = WordType.id)
+	INNER JOIN adab.words_word_types 	AS WordsWordType 		ON (WordsWordType.word_type_id = WordType.id)
 LEFT JOIN adab.words 			AS Word 			ON (WordsWordType.word_id = Word.id)
 INNER JOIN adab.terms_words 		AS TermsWord 			ON (TermsWord.word_id = Word.id)
 RIGHT JOIN adab.terms 			AS Term 			ON (TermsWord.term_id = Term.id)
@@ -214,6 +258,7 @@ function add() {
 $this->set('title', 'Add a tablet');
 if (!empty($this->data)) {
 	$this->set(compact('objectTypes','signPaleos','edges','shapes','sizeClasses','corners', 'archLocs', 'archSites', 'periods', 'genres', 'months', 'years', 'collections', 'projects', 'rulers', 'officials','fromLocations','fromPeople','toLocations','toPeople','groups', 'keywords', 'languages', 'tags', 'terms'));
+
 	$tablet=$this->Tablet->save($this->data);
 	$this->Session->setFlash('Your entry has been saved.');
 	$this->redirect(array('action' => 'add'));
@@ -244,8 +289,9 @@ $this->set('archLocs', $this->Tablet->ArchLoc->find('list'));
 	$this->set('shapes', $this->Tablet->Shape->find('list'));
 	$this->set('sizeClasses', $this->Tablet->SizeClass->find('list'));
 	$this->set('objectTypes', $this->Tablet->ObjectType->find('list'));
+	$this->set('transacs', $this->Tablet->Transac->find('list'));
 
-}
+	}
 
 
 function edit($id = null)
@@ -264,32 +310,43 @@ function edit($id = null)
 	}
 	else
 	{
-$this->set(compact('objectTypes', 'signPaleos','edges','shapes','sizeClasses','corners', 'archLocs', 'archSites', 'periods', 'genres', 'months', 'years', 'collections', 'projects', 'rulers', 'officials','fromLocations','fromPeople','toLocations','toPeople','groups', 'keywords', 'languages', 'tags', 'terms'));		$files=$this->data['File'];
+			$size = explode('x',$terms=preg_replace('/\*/', '', $this->data['Tablet']['size']));
+			$height = $size[0];
+			$width = $size[1];
+			$thickness = $size[2];
+			$lw_ratio= $size[0]/$size[1];
+			$t_ratio = (($size[0]+$size[1])/2)/$size[2];
 
-		if ($this->Tablet->save($this->data)){
-		  $this->Session->setFlash('Your entry has been updated.');
+			$this->set(compact('height','width','thickness','lw_ratio','t_ratio', 'transacs','objectTypes', 'signPaleos','edges','shapes','sizeClasses','corners', 'archLocs', 'archSites', 'periods', 'genres', 'months', 'years', 'collections', 'projects', 'rulers', 'officials','fromLocations','fromPeople','toLocations','toPeople','groups', 'keywords', 'languages', 'tags', 'terms'));		$files=$this->data['File'];
+		//debug($this->request->data);
+			$size = explode('x',$terms=preg_replace('/\*/', '', $this->data['Tablet']['size']));
+			$data['Tablet']['height'] = $size[0];
+			$this->Tablet->set('width', $size[1]);
+			$this->Tablet->set('thickness', $size[2]);
+			$this->Tablet->set('lw_ratio', $size[0]/$size[1]);
+			$this->Tablet->set('t_ratio', (($size[0]+$size[1])/2)/$size[2]);
+
+			echo '<pre>';
+			print_r($this->data['Tablet']);
+			echo '<pre>';
+
+		if ($this->Tablet->saveAll($this->data)){
+	  	$this->Session->setFlash('Your entry has been updated.');
 		  $this->redirect(array('action' => 'view', $id));
 		  }
 		else{
 		  $this->Session->setFlash(__('The tablet could not be saved. Please, try again.', true));
 		  }
-
-
 	}
-
 	$this->set('id',$this->Tablet->id);
 	$this->set('tablet', $this->Tablet->read(null, $id));
 	$this->set('archLocs', $this->Tablet->ArchLoc->find('list'));
-
 	$this->set('archSites', $this->Tablet->ArchSite->find('list'));
 	$this->set('periods', $this->Tablet->Period->find('list'));
 	$this->set('genres', $this->Tablet->Genre->find('list'));
-
-
 	$this->set('tags', $this->Tablet->Tag->find('list'));
 	$this->set('collections', $this->Tablet->Collection->find('list'));
 	$this->set('groups', $this->Tablet->Group->find('list'));
-
 	$this->set('languages', $this->Tablet->Language->find('list'));
 	$this->set('keywords', $this->Tablet->Keyword->find('list'));
 	$this->set('months', $this->Tablet->Month->find('list'));
@@ -308,6 +365,7 @@ $this->set(compact('objectTypes', 'signPaleos','edges','shapes','sizeClasses','c
 	$this->set('shapes', $this->Tablet->Shape->find('list'));
 	$this->set('sizeClasses', $this->Tablet->SizeClass->find('list'));
 	$this->set('objectTypes', $this->Tablet->ObjectType->find('list'));
+	$this->set('transacs', $this->Tablet->Transac->find('list'));
 }
 
 function delete($id = null)

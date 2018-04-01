@@ -24,6 +24,7 @@
 		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $wordType['WordType']['id'])); ?>
+						<?php echo $this->Html->link(__('LatexGlossary', true), array('action' => 'latex_glossary', $wordType['WordType']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $wordType['WordType']['id'])); ?>
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $wordType['WordType']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $wordType['WordType']['id'])); ?>
 		</td>

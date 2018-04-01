@@ -1,5 +1,6 @@
 <div class="terms index">
 <h2><?php __('Terms');?></h2>
+<?php echo $this->Filter->filterForm('Term', array('legend' => 'Search')); ?>
 <table cellpadding="0" cellspacing="0">
   <tr>
     <th><?php echo $this->Paginator->sort('term'); ?></th>
@@ -17,20 +18,20 @@ if ($i % 2 == 0) {
 $class = 'class="altrow"';}
 ?>
 <tr<?php echo $class;?>>
-<td>	
-<?php 
+<td>
+<?php
 echo $this->Html->link($term['Term']['term'], array('controller' => 'terms', 'action' => 'view', $term['Term']['id'])); ?>
 </td>
 <td>
-<?php 
-foreach ($term['Word'] as $word): 
+<?php
+foreach ($term['Word'] as $word):
 ?>
 <?php echo $this->Html->link($word['word'], array('controller' => 'words', 'action' => 'view', $word['id'])); ?>
- 
+
 <?php// foreach ($word['WordType'] as $word_type): ?>
 <?php //echo $this->Html->link($word_type['word_type'], array('controller' => 'word_types', 'action' => 'view', $word_type['id'])); ?>
 <?php //echo ' ';?>
-<?php //endforeach; 
+<?php //endforeach;
 //echo ')';
 endforeach;?>
 </td>
@@ -60,4 +61,4 @@ endforeach;?>
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-	</div>	
+	</div>

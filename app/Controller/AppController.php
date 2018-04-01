@@ -2,7 +2,13 @@
 // app/Controller/AppController.php
 App::uses('Controller', 'Controller');
 class AppController extends Controller {
-
+  /**
+   * The paginate options for this controller
+   *
+   * @var array
+   */
+  public $paginate = array();
+  
     public $components = array(
        /* 'DebugKit.Toolbar',*/
 			/*	'Session',
@@ -22,7 +28,7 @@ class AppController extends Controller {
   //  public function beforeFilter() {
   //      $this->Auth->allow('index', 'view');
   //  }
-   
+
 
 }
 ?>

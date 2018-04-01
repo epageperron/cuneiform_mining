@@ -10,10 +10,10 @@
 );
 
 ?>	</p>
-		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
+		<?php echo $this->Paginator->prev('<< ' . __('previous'), array(), null, array('class'=>'disabled'));?>
 	 | 	<?php echo $this->Paginator->numbers();?>
  |
-		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+		<?php echo $this->Paginator->next(__('next') . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
@@ -28,6 +28,8 @@
 			<th><?php echo $this->Paginator->sort('date_month');?></th>
 			<th ><?php echo $this->Paginator->sort('official_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('subject');?></th>
+	<th><?php echo $this->Paginator->sort('translit');?></th>
+					<th>Image</th>
 			<th><?php echo $this->Paginator->sort('Actions');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
@@ -49,10 +51,10 @@
 <?php echo $tablet['Tablet']['no_museum'] ?></td>
 <td> <a href="http://cdli.ucla.edu/<?php echo $tablet['Tablet']['no_cdli'];?>" title="Link to CDLI entry" target="_cdli"><?php echo $tablet['Tablet']['no_cdli']; ?></a></td>
 <td>
-			<?php echo $this->Html->link($tablet['ArchSite']['arch_site'], array('controller' => 'arch_sites', 'action' => 'view', $tablet['Tablet']['period_id'])); ?>
+			<?php echo $this->Html->link($tablet['ArchSite']['arch_site'], array('controller' => 'arch_sites', 'action' => 'view', $tablet['Tablet']['arch_site_id'])); ?>
 		</td>
 <td>
-			<?php echo $this->Html->link($tablet['Period']['period'], array('controller' => 'periods', 'action' => 'view', $tablet['Tablet']['arch_site_id'])); ?>
+			<?php echo $this->Html->link($tablet['Period']['period'], array('controller' => 'periods', 'action' => 'view', $tablet['Tablet']['period_id'])); ?>
 		</td>
 <td>
 			<?php echo $this->Html->link($tablet['Ruler']['term'], array('controller' => 'terms', 'action' => 'view', $tablet['Tablet']['ruler_id'])); ?>
@@ -72,7 +74,18 @@
 		</td>
 
 				<td><?php echo $tablet['Tablet']['subject']; ?></td>
-				<td>
+				<td><pre class="list-translit"><?php echo $tablet['Tablet']['translit']; ?></pre></td>
+<td>
+<?php
+foreach (glob('/alty/htdocs/adab/app/webroot/tablet_files/'.$tablet['Tablet']['no_cdli'].'*') as $img):
+?>
+<a href="/tablet_files/<?php echo basename($img); ?>">
+	<img src="/tablet_files/<?php echo basename($img);?>" style="width:100px;"></a>
+<?php
+break;
+endforeach; ?>
+</td>
+<td>
 				<?php
 				if (!empty($tablet['Action'])){
 				foreach ($tablet['Action'] as $action) {
@@ -100,9 +113,9 @@
 );
 
 ?>	</p>
-	<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
+	<?php echo $this->Paginator->prev('<< ' . __('previous'), array(), null, array('class'=>'disabled'));?>
 	 | 	<?php echo $this->Paginator->numbers();?>
  |
-		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+		<?php echo $this->Paginator->next(__('next') . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
 </div>

@@ -1,6 +1,7 @@
 <div class="words index">
 <h2><?php echo __('Words');
 $z=0;?></h2>
+<?php echo $this->Filter->filterForm('Word', array('legend' => 'Search')); ?>
 <div class="paging">
 <?php
 echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));

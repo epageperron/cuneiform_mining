@@ -41,7 +41,10 @@ echo $this->Html->script('jquery-1.4.2.min');?>
 				<!-- <li><?php //echo $this->Html->link('Inline Edit',array('controller' => 'terms', 'action' => 'inline_edit'))?></li> -->
 		   </ul>
 		<li><?php echo $this->Html->link('Options', array('controller' => 'pages', 'action' => 'display', 'options'));?>
-<ul>	<li><?php echo $this->Html->link('List Tags',array('controller' => 'tags', 'action' => 'index'))?></li></ul>
+<ul>	<li><?php echo $this->Html->link('List Tags',array('controller' => 'tags', 'action' => 'index'))?></li>
+<li><?php echo $this->Html->link('Refresh All Terms',array('controller' => 'tags', 'action' => 'refresh_all_terms'))?></li>
+<li><?php echo $this->Html->link('Delete Extra Terms',array('controller' => 'tags', 'action' => 'delete_extra_terms'))?></li>
+</ul>
 	</ul>
 </div>
 <div id="content">

@@ -19,5 +19,8 @@ class Period extends AppModel {
 			'counterQuery' => ''
 		)
 	);
-
+/*	function list_periods() // list a related model for the filter plugin
+ {
+ 	return $this->Period->find('list');
+}*/
 }

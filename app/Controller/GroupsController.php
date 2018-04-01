@@ -1,11 +1,11 @@
 <?php
 class GroupsController extends AppController {
-
+public $components = array('Paginator', 'Session');
 	var $name = 'Groups';
 
 	function index() {
-		$this->Group->recursive = 0;
-		$this->set('groups', $this->paginate());
+		$this->Group->recursive = 1;
+		$this->set('groups', $this->Paginator->paginate());
 	}
 
 	function view($id = null) {

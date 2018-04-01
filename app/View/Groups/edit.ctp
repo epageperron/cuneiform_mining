@@ -5,6 +5,8 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('group');
+		echo $this->Form->input('parent_id');
+		echo $this->Form->input('comments');
 		echo $this->Form->input('Tablet');
 	?>
 	</fieldset>

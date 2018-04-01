@@ -53,6 +53,9 @@ echo $this->Form->input('epi_notes');
 		<div id="tag" class="updatable">
 		<?php echo $this->element('tablet_action_div'); ?>
 		</div>
+		<div id="transaction" class="updatable">
+		<?php echo $this->element('tablet_transaction_div'); ?>
+		</div>
 	</fieldset>
 	<fieldset>
 	<legend>Contents - General</legend>

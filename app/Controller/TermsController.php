@@ -1,10 +1,18 @@
 <?php
 class TermsController extends AppController {
 	var $actsAs = array ('Searchable', 'Containable');
-	var $components = array('RequestHandler', 'AffTerms'/*, 'Search'*/, 'Session');
+	var $components = array('RequestHandler', 'AffTerms'/*, 'Search'*/, 'Session', 'Filter.Filter');
 	var $name = 'Terms';
 	var $paginate = array('limit' => 500, 'order' => array(  'Term.Word' => 'asc', 'Term.term' => 'asc' ));
-	var $uses = array('Term', 'Word', 'WordType', 'Tablet');
+var $uses = array('Term', 'Word', 'WordType', 'Tablet');
+
+var $filters = array
+		(
+				'index' => array
+				(
+						'Term' => array
+							(
+							'Term.term')));
 
 function index(){
 $this->Term->recursive=1;
